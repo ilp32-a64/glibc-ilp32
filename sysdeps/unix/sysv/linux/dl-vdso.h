@@ -50,6 +50,10 @@ prepare_version_base (const char *name, ElfW(Word) hash)
 #define VDSO_HASH_LINUX_4	14921332
 #define VDSO_NAME_LINUX_4_9	"LINUX_4.9"
 #define VDSO_HASH_LINUX_4_9	61765625
+
+/* AArch64 ILP32 vDSO of the kernel ILP32 series.  */
+#define VDSO_NAME_LINUX_4_12	"LINUX_4.12"
+#define VDSO_HASH_LINUX_4_12	182943602
 #define VDSO_NAME_LINUX_4_15	"LINUX_4.15"
 #define VDSO_HASH_LINUX_4_15	182943605
 

@@ -43,8 +43,13 @@ __gettimeofday_vsyscall (struct timeval *tv, struct timezone *tz)
    sysdeps/unix/sysv/linux/aarch64/init-first.c.  */
 
 # undef INIT_ARCH
+# ifdef __LP64__
+#  define VDSO_VERSION_GTOD LINUX_2_6_39
+# else
+#  define VDSO_VERSION_GTOD LINUX_4_12	/* ILP32 vDSO */
+# endif
 # define INIT_ARCH() \
-	   PREPARE_VERSION_KNOWN (linux_version, LINUX_2_6_39); \
+	   PREPARE_VERSION_KNOWN (linux_version, VDSO_VERSION_GTOD); \
 	   void *vdso_gettimeofday = \
 	     _dl_vdso_vsym ("__kernel_gettimeofday", &linux_version);
 
