@@ -19,9 +19,9 @@ This default branch only holds this file. The library is in the branches below.
 
 ## Build
 
-[ilp32-a64/ilp32-test](https://github.com/ilp32-a64/ilp32-test) (`toolchain/build-toolchain.sh`) builds the
+[ilp32-a64/test-ilp32](https://github.com/ilp32-a64/test-ilp32) (`toolchain/build-toolchain.sh`) builds the
 `aarch64-linux-gnu_ilp32` cross toolchain with this branch: binutils 2.35.2, GCC 10.5, kernel headers from
-[ilp32-a64/linux](https://github.com/ilp32-a64/linux).
+[ilp32-a64/linux-ilp32](https://github.com/ilp32-a64/linux-ilp32).
 
 Data model: `long`, pointers, `size_t`, `time_t` 4 bytes; `off_t` 8 bytes; `long double` 16 bytes.
 Libraries in `/libilp32` and `/usr/libilp32`, dynamic linker `/lib/ld-linux-aarch64_ilp32.so.1`.
