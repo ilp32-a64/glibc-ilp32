@@ -1,7 +1,11 @@
 case "$machine" in
 aarch64*)
 	base_machine=aarch64
-	machine=aarch64
+	case `$CC $CFLAGS $CPPFLAGS -E -dM -xc /dev/null` in
+	*"#define __ILP32__ 1"*) aarch64_config_abi=ilp32 ;;
+	*) aarch64_config_abi=lp64 ;;
+	esac
+	machine=aarch64/$aarch64_config_abi
 	mtls_descriptor=desc
 	mtls_traditional=trad
 	;;

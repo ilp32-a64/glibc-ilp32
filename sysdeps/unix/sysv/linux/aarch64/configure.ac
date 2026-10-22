@@ -1,6 +1,11 @@
 GLIBC_PROVIDES dnl See aclocal.m4 in the top level source directory.
 # Local configure fragment for sysdeps/unix/sysv/linux/aarch64.
 
-arch_minimum_kernel=3.7.0
-
-LIBC_SLIBDIR_RTLDDIR([lib64], [lib])
+if test $aarch64_config_abi = ilp32; then
+  # ILP32 uses the 64-bit time system calls (Linux 5.1) and statx (4.11).
+  arch_minimum_kernel=5.10.0
+  LIBC_SLIBDIR_RTLDDIR([libilp32], [lib])
+else
+  arch_minimum_kernel=3.7.0
+  LIBC_SLIBDIR_RTLDDIR([lib64], [lib])
+fi

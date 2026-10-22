@@ -19,10 +19,12 @@ AC_CACHE_CHECK([for big endian],
   ], libc_cv_aarch64_be=yes, libc_cv_aarch64_be=no)])
 if test $libc_cv_aarch64_be = yes; then
   AC_DEFINE(HAVE_AARCH64_BE)
-  LIBC_CONFIG_VAR([default-abi], [lp64_be])
+  libc_aarch64_be=_be
 else
-  LIBC_CONFIG_VAR([default-abi], [lp64])
+  libc_aarch64_be=
 fi
+# aarch64_config_abi (lp64 or ilp32) is set by preconfigure.
+LIBC_CONFIG_VAR([default-abi], [${aarch64_config_abi}${libc_aarch64_be}])
 
 # Only consider BTI supported if -mbranch-protection=bti is
 # on by default in the compiler and the linker produces
@@ -104,7 +106,12 @@ if test $libc_cv_aarch64_sve_asm = yes; then
 fi
 
 if test x"$build_mathvec" = xnotset; then
-  build_mathvec=yes
+  # The vector function ABI is only defined for LP64.
+  if test $aarch64_config_abi = ilp32; then
+    build_mathvec=no
+  else
+    build_mathvec=yes
+  fi
 fi
 
 # Check if compiler supports SVE ACLE.
@@ -137,6 +144,6 @@ if test $build_mathvec = yes; then
   if test $fail = yes; then
     AC_MSG_ERROR([use a compatible toolchain or configure with --disable-mathvec (this results in incomplete ABI).])
   fi
-else
+elif test $aarch64_config_abi != ilp32; then
   AC_MSG_WARN([mathvec is disabled, this results in incomplete ABI.])
 fi

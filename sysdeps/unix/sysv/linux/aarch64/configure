@@ -1,9 +1,24 @@
 # This file is generated from configure.ac by Autoconf.  DO NOT EDIT!
  # Local configure fragment for sysdeps/unix/sysv/linux/aarch64.
 
-arch_minimum_kernel=3.7.0
-
-test -n "$libc_cv_slibdir" ||
+if test $aarch64_config_abi = ilp32; then
+  # ILP32 uses the 64-bit time system calls (Linux 5.1) and statx (4.11).
+  arch_minimum_kernel=5.10.0
+  test -n "$libc_cv_slibdir" ||
+case "$prefix" in
+/usr | /usr/)
+  libc_cv_slibdir='/libilp32'
+  libc_cv_rtlddir='/lib'
+  if test "$libdir" = '${exec_prefix}/lib'; then
+    libdir='${exec_prefix}/libilp32';
+    # Locale data can be shared between 32-bit and 64-bit libraries.
+    libc_cv_complocaledir='${exec_prefix}/lib/locale'
+  fi
+  ;;
+esac
+else
+  arch_minimum_kernel=3.7.0
+  test -n "$libc_cv_slibdir" ||
 case "$prefix" in
 /usr | /usr/)
   libc_cv_slibdir='/lib64'
@@ -15,4 +30,5 @@ case "$prefix" in
   fi
   ;;
 esac
+fi
 
