@@ -228,6 +228,9 @@ print_entry (const char *lib, int flag, uint64_t hwcap,
     case FLAG_LARCH_FLOAT_ABI_DOUBLE:
       fputs (",double-float", stdout);
       break;
+    case FLAG_AARCH64_LIB32:
+      fputs (",AArch64 ILP32", stdout);
+      break;
     case 0:
       break;
     default:

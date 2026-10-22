@@ -46,6 +46,7 @@
 #define FLAG_RISCV_FLOAT_ABI_DOUBLE	0x1000
 #define FLAG_LARCH_FLOAT_ABI_SOFT	0x1100
 #define FLAG_LARCH_FLOAT_ABI_DOUBLE	0x1200
+#define FLAG_AARCH64_LIB32		0x1300
 
 /* Name of auxiliary cache.  */
 #define _PATH_LDCONFIG_AUX_CACHE "/var/cache/ldconfig/aux-cache"
