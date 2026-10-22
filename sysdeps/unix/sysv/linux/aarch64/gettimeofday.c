@@ -16,5 +16,10 @@
    License along with the GNU C Library; if not, see
    <https://www.gnu.org/licenses/>.  */
 
-#define USE_IFUNC_GETTIMEOFDAY
+/* ILP32 has a 64-bit time_t, but the vDSO and system call gettimeofday
+   use the 32-bit time struct timeval; use the generic version, which is
+   built on clock_gettime64.  */
+#ifdef __LP64__
+# define USE_IFUNC_GETTIMEOFDAY
+#endif
 #include <sysdeps/unix/sysv/linux/gettimeofday.c>

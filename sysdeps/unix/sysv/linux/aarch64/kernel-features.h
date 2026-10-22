@@ -21,3 +21,24 @@
 
 #undef __ASSUME_CLONE_DEFAULT
 #define __ASSUME_CLONE_BACKWARDS 1
+
+#ifndef __LP64__
+/* ILP32 uses the AArch32 (compat) handlers of the kernel for the system
+   calls with 64-bit arguments and for SysV IPC, as ARM does.  */
+
+/* fadvise64_64 takes the advice before the offset and length.  */
+# define __ASSUME_FADVISE64_64_6ARG	1
+
+/* 64-bit arguments are register pairs starting with an even-numbered
+   register.  */
+# define __ASSUME_ALIGNED_REGISTER_PAIRS	1
+
+/* The compat struct ipc64_perm has a 16-bit mode.  */
+# include <endian.h>
+# if __BYTE_ORDER == __BIG_ENDIAN
+#  define __ASSUME_SYSVIPC_BROKEN_MODE_T
+# endif
+
+/* The compat IPC control calls need IPC_64.  */
+# undef __ASSUME_SYSVIPC_DEFAULT_IPC_64
+#endif

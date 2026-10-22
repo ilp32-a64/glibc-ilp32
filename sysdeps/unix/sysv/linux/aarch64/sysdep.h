@@ -41,6 +41,60 @@
 #undef SYS_ify
 #define SYS_ify(syscall_name)	(__NR_##syscall_name)
 
+#ifndef __LP64__
+/* ILP32 has a 64-bit time_t.  The kernel ABI also has the system calls
+   with 32-bit time (and the 32-bit time stat64 calls) for compatibility,
+   under the generic names.  Remove these names, as the 32-bit ABIs added
+   after Linux 5.1 do not have them, so that generic code cannot use them
+   by mistake, and map the ones generic code expects to the 64-bit time
+   variants, as RISC-V does for RV32.  */
+# undef __NR_adjtimex
+# undef __NR_clock_adjtime
+# undef __NR_clock_getres
+# undef __NR_clock_gettime
+# undef __NR_clock_nanosleep
+# undef __NR_clock_settime
+# undef __NR_fstat64
+# undef __NR_fstatat64
+# undef __NR_futex
+# undef __NR_gettimeofday
+# undef __NR_io_getevents
+# undef __NR_io_pgetevents
+# undef __NR_mq_timedreceive
+# undef __NR_mq_timedsend
+# undef __NR_nanosleep
+# undef __NR_ppoll
+# undef __NR_pselect6
+# undef __NR_recvmmsg
+# undef __NR_rt_sigtimedwait
+# undef __NR_sched_rr_get_interval
+# undef __NR_semtimedop
+# undef __NR_settimeofday
+# undef __NR_timer_gettime
+# undef __NR_timer_settime
+# undef __NR_timerfd_gettime
+# undef __NR_timerfd_settime
+# undef __NR_utimensat
+# undef __NR_wait4
+
+/* Fix sysdeps/unix/sysv/linux/clock_getcpuclockid.c.  */
+# define __NR_clock_getres	__NR_clock_getres_time64
+/* Fix sysdeps/nptl/lowlevellock-futex.h.  */
+# define __NR_futex		__NR_futex_time64
+/* Fix sysdeps/unix/sysv/linux/pause.c.  */
+# define __NR_ppoll		__NR_ppoll_time64
+/* Fix sysdeps/unix/sysv/linux/select.c.  */
+# define __NR_pselect6		__NR_pselect6_time64
+/* Fix sysdeps/unix/sysv/linux/recvmmsg.c.  */
+# define __NR_recvmmsg		__NR_recvmmsg_time64
+/* Fix sysdeps/unix/sysv/linux/sigtimedwait.c.  */
+# define __NR_rt_sigtimedwait	__NR_rt_sigtimedwait_time64
+/* Fix sysdeps/unix/sysv/linux/semtimedop.c.  */
+# define __NR_semtimedop	__NR_semtimedop_time64
+/* Hack sysdeps/unix/sysv/linux/generic/utimes.c.  */
+# define __NR_utimensat		__NR_utimensat_time64
+#endif /* !__LP64__ */
+
 #ifdef __ASSEMBLER__
 
 /* Linux uses a negative return value to indicate syscall errors,
@@ -168,16 +222,21 @@
 # ifdef __LP64__
 #  define VDSO_NAME  "LINUX_2.6.39"
 #  define VDSO_HASH  123718537
-# else
-#  define VDSO_NAME  "LINUX_4.9"
-#  define VDSO_HASH  61765625
-# endif
 
 /* List of system calls which are supported as vsyscalls.  */
-# define HAVE_CLOCK_GETRES64_VSYSCALL	"__kernel_clock_getres"
-# define HAVE_CLOCK_GETTIME64_VSYSCALL	"__kernel_clock_gettime"
-# define HAVE_GETTIMEOFDAY_VSYSCALL	"__kernel_gettimeofday"
-# define HAVE_GETRANDOM_VSYSCALL        "__kernel_getrandom"
+#  define HAVE_CLOCK_GETRES64_VSYSCALL	"__kernel_clock_getres"
+#  define HAVE_CLOCK_GETTIME64_VSYSCALL	"__kernel_clock_gettime"
+#  define HAVE_GETTIMEOFDAY_VSYSCALL	"__kernel_gettimeofday"
+#  define HAVE_GETRANDOM_VSYSCALL        "__kernel_getrandom"
+# else
+#  define VDSO_NAME  "LINUX_4.12"
+#  define VDSO_HASH  182943602
+
+/* In the ILP32 vDSO only __kernel_clock_gettime64 uses a 64-bit time;
+   __kernel_clock_gettime, __kernel_clock_getres and
+   __kernel_gettimeofday use the 32-bit time types.  */
+#  define HAVE_CLOCK_GETTIME64_VSYSCALL	"__kernel_clock_gettime64"
+# endif
 
 # define HAVE_CLONE3_WRAPPER		1
 
