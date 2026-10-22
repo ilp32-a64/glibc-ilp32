@@ -25,6 +25,7 @@
 */
 
 ENTRY (__rawmemchr)
+	PTR_ARG (0)
 	cbz	w1, L(do_strlen)
 	mov	x2, -1
 	b	__memchr

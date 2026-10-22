@@ -29,6 +29,7 @@
 					long int arg6 [x7])  */
 
 ENTRY (__syscall_cancel_arch)
+	PTR_ARG (0)
 
 	.globl __syscall_cancel_arch_start
 __syscall_cancel_arch_start:
