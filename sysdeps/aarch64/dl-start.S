@@ -33,10 +33,11 @@ ENTRY (_start)
 	/* Returns user entry point in x0.  */
 	mov	PTR_REG (21), PTR_REG (0)
 
-	/* Use GL(dl_aarch64_gcs) to set the shadow stack status.  */
+	/* Use GL(dl_aarch64_gcs) to set the shadow stack status.  It is an
+	   unsigned long, which has the size of a pointer.  */
 	adrp	x16, _rtld_local
 	add	PTR_REG (16), PTR_REG (16), :lo12:_rtld_local
-	ldr	x1, [x16, GL_DL_AARCH64_GCS_OFFSET]
+	ldr	PTR_REG (1), [x16, GL_DL_AARCH64_GCS_OFFSET]
 	cbz	x1, L(skip_gcs_enable)
 
 	/* Enable GCS before user code runs.  Note that IFUNC resolvers and

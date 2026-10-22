@@ -36,7 +36,7 @@ ENTRY (__libc_arm_za_disable)
 #ifdef SHARED
 	/* In libc.so.  */
 	adrp	x14, :got:_rtld_global_ro
-	ldr	x14, [x14, :got_lo12:_rtld_global_ro]
+	ldr	PTR_REG (14), [x14, :got_lo12:_rtld_global_ro]
 	ldr	x14, [x14, GLRO_DL_HWCAP2_OFFSET]
 #else
 	/* In libc.a, may be PIC.  */

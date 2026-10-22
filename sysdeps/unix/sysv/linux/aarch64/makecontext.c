@@ -93,7 +93,7 @@ __makecontext (ucontext_t *ucp, void (*func) (void), int argc, ...)
       struct { uint64_t x, gcspr, y, z; } *q = p;
       /* TODO: this allocation remains mapped even after thread
          that uses it exits.  */
-      q->gcspr = (uint64_t) alloc_makecontext_gcs (ucp->uc_stack.ss_size);
+      q->gcspr = (uintptr_t) alloc_makecontext_gcs (ucp->uc_stack.ss_size);
     }
 
   va_start (ap, argc);

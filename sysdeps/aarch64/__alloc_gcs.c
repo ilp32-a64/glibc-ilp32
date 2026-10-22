@@ -53,7 +53,7 @@ __alloc_gcs (size_t stack_size, void **ss_base, size_t *ss_size)
   gcsp--;
   /* Verify GCS cap token.  */
   gcsp--;
-  if (((uint64_t)gcsp & 0xfffffffffffff000) + 1 != *gcsp)
+  if (((uintptr_t) gcsp & 0xfffffffffffff000) + 1 != *gcsp)
     {
       __munmap (base, size);
       return NULL;
