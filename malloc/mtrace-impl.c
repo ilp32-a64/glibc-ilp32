@@ -60,12 +60,12 @@ tr_where (const void *caller, Dl_info *info)
 		  sign = '-';
 
 	      sprintf (buf, "(%s%c%" PRIxPTR ")", info->dli_sname, sign,
-		       offset);
+		       (uintptr_t) offset);
             }
 
 	  fprintf (mallstream, "@ %s%s%s[0x%" PRIxPTR "] ",
 		   info->dli_fname ? : "", info->dli_fname ? ":" : "", buf,
-		   caller - info->dli_fbase);
+		   (uintptr_t) (caller - info->dli_fbase));
         }
       else
         fprintf (mallstream, "@ [%p] ", caller);
